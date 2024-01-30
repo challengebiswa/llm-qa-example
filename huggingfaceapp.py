@@ -32,10 +32,15 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
+    local_model_path = "C:/Users/Biswajit_Das1/projects/llm-qa-example/huggingface_model/instructor-xl"
     embeddings = HuggingFaceInstructEmbeddings(
-        model_name="hkunlp/instructor-xl")
+        model_name=local_model_path)
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
-    return vectorstore
+    vectorstore.save_local(
+        "C:/Users/Biswajit_Das1/projects/llm-qa-example/vector_store", "Standford")
+    vectordbstore = FAISS.load_local("C:/Users/Biswajit_Das1/projects/llm-qa-example/vector_store",
+                                     embeddings, "Standford")
+    return vectordbstore
 
 
 def get_conversation_chain(vectorstore):
